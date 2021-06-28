@@ -30,19 +30,16 @@ const addNewNote = (str) => {
 };
 
 const cancelEdit = (node, str) => {
-  console.log("string in cancel helper: ", str);
   node.value = str;
   node.setAttribute("readonly", "true");
   const wrapper = node.parentElement;
   wrapper.removeChild(wrapper.lastElementChild);
-  // wrapper.removeChild(wrapper.lastElementChild);
 };
 
 const saveEdit = (node) => {
   node.setAttribute("readonly", true);
   const wrapper = node.parentElement;
   wrapper.removeChild(wrapper.lastElementChild);
-  // wrapper.removeChild(wrapper.lastElementChild);
 };
 
 const editNote = (node, str) => {
@@ -95,3 +92,28 @@ document.addEventListener("click", (e) => {
 });
 
 // Swap notes within the grid
+const noteGrid = document.getElementById("note-grid");
+noteGrid.addEventListener("click", (e) => {
+  const swapList = noteGrid.querySelectorAll(".selected");
+
+  // if the list is 2 long swap them and deselect
+  if (swapList.length === 2) {
+    const items = noteGrid.children;
+    const newGrid = document.createDocumentFragment();
+    const item1Idx = [].findIndex.call(items, (ele) => ele === swapList[0]);
+    const item2Idx = [].findIndex.call(items, (ele) => ele === swapList[1]);
+
+    for (let i = 0; i < items.length; i++) {
+      if (i === item1Idx) {
+        console.log("item 2: ", items[item2Idx]);
+        newGrid.appendChild(items[item2Idx].cloneNode(true));
+      } else if (i === item2Idx) {
+        newGrid.appendChild(items[item1Idx].cloneNode(true));
+      } else {
+        newGrid.appendChild(items[i].cloneNode(true));
+      }
+    }
+    noteGrid.innerHTML = null;
+    noteGrid.appendChild(newGrid);
+  }
+});
