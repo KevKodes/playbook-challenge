@@ -10,8 +10,6 @@
   grid-template-rows: repeat(6, 1fr);
   min-width: 600px;
   min-height: 900px;
-  /* border: 1px solid #274450; */
-  /* border: 2px solid #ff6200; */
   gap: 10px;
 }
 
