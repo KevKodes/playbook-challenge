@@ -17,16 +17,6 @@ const addNewNote = (str) => {
   buttonDiv.appendChild(deleteButton);
   newNote.appendChild(buttonDiv);
   parent.appendChild(newNote);
-
-  newNote.addEventListener("click", (e) => {
-    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "TEXTAREA") {
-      if (newNote.classList.contains("selected")) {
-        newNote.classList.remove("selected");
-      } else {
-        newNote.classList.add("selected");
-      }
-    }
-  });
 };
 
 const cancelEdit = (node, str) => {
@@ -75,6 +65,21 @@ addButton.addEventListener("click", (e) => {
   const newNoteStr = textarea.value;
   textarea.value = "";
   addNewNote(newNoteStr);
+});
+
+// Handler to select notes in the grid
+document.getElementById("note-grid").addEventListener("click", (e) => {
+  if (
+    e.target.classList.contains("grid-item") &&
+    e.target.tagName !== "BUTTON" &&
+    e.target.tagName !== "TEXTAREA"
+  ) {
+    if (e.target.classList.contains("selected")) {
+      e.target.classList.remove("selected");
+    } else {
+      e.target.classList.add("selected");
+    }
+  }
 });
 
 // Click handler to edit or delete the clicked note
