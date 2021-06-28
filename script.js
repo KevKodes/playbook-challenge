@@ -5,6 +5,7 @@ const addNewNote = (str) => {
   const noteText = document.createElement("textarea");
   noteText.setAttribute("readOnly", "true");
   noteText.innerHTML = str;
+  const buttonDiv = document.createElement("div");
   const editButton = document.createElement("button");
   editButton.className = "edit-note";
   const deleteButton = document.createElement("button");
@@ -12,25 +13,26 @@ const addNewNote = (str) => {
   editButton.innerText = "Edit";
   deleteButton.innerText = "Delete";
   newNote.appendChild(noteText);
-  newNote.appendChild(editButton);
-  newNote.appendChild(deleteButton);
+  buttonDiv.appendChild(editButton);
+  buttonDiv.appendChild(deleteButton);
+  newNote.appendChild(buttonDiv);
   parent.appendChild(newNote);
 
   newNote.addEventListener("click", (e) => {
-    if (newNote.classList.contains("selected")) {
-      newNote.classList.remove("selected");
-    } else {
-      newNote.classList.add("selected");
+    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "TEXTAREA") {
+      if (newNote.classList.contains("selected")) {
+        newNote.classList.remove("selected");
+      } else {
+        newNote.classList.add("selected");
+      }
     }
   });
 };
 
 const cancelEdit = (node, str) => {
-  console.log("string in cancel helper: ", str);
   node.value = str;
   node.setAttribute("readonly", "true");
   const wrapper = node.parentElement;
-  wrapper.removeChild(wrapper.lastElementChild);
   wrapper.removeChild(wrapper.lastElementChild);
 };
 
@@ -38,12 +40,13 @@ const saveEdit = (node) => {
   node.setAttribute("readonly", true);
   const wrapper = node.parentElement;
   wrapper.removeChild(wrapper.lastElementChild);
-  wrapper.removeChild(wrapper.lastElementChild);
 };
 
 const editNote = (node, str) => {
   node.removeAttribute("readonly");
   const wrapper = node.parentElement;
+  const buttonDiv = document.createElement("div");
+  wrapper.appendChild(buttonDiv);
 
   //save button
   const saveButton = document.createElement("button");
@@ -52,7 +55,7 @@ const editNote = (node, str) => {
   saveButton.addEventListener("click", () => {
     saveEdit(node);
   });
-  wrapper.appendChild(saveButton);
+  buttonDiv.appendChild(saveButton);
 
   // cancel button
   const cancelButton = document.createElement("button");
@@ -61,7 +64,7 @@ const editNote = (node, str) => {
     cancelEdit(node, str);
   });
   cancelButton.innerText = "Cancel Changes";
-  wrapper.appendChild(cancelButton);
+  buttonDiv.appendChild(cancelButton);
 };
 
 // Click handler for the add note button
@@ -77,16 +80,44 @@ addButton.addEventListener("click", (e) => {
 // Click handler to edit or delete the clicked note
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("edit-note")) {
-    const editArea = e.target.previousElementSibling;
+    const editArea = e.target.parentElement.previousElementSibling;
     const originalNote = editArea.innerHTML;
-    console.log("original text: ", originalNote);
     editNote(editArea, originalNote);
   }
 
   if (e.target.classList.contains("delete-note")) {
-    const deleted = e.target.parentElement;
+    const deleted = e.target.parentElement.parentElement;
     deleted.parentElement.removeChild(deleted);
   }
 });
 
-// Click handler to select notes from the grid
+// Swap notes within the grid
+const noteGrid = document.getElementById("note-grid");
+noteGrid.addEventListener("click", (e) => {
+  const swapList = noteGrid.querySelectorAll(".selected");
+
+  // if the list is 2 long swap them and deselect
+  if (swapList.length === 2) {
+    const items = noteGrid.children;
+    const newGrid = document.createDocumentFragment();
+    const item1Idx = [].findIndex.call(items, (ele) => ele === swapList[0]);
+    const item2Idx = [].findIndex.call(items, (ele) => ele === swapList[1]);
+
+    for (let i = 0; i < items.length; i++) {
+      if (i === item1Idx) {
+        console.log("item 2: ", items[item2Idx]);
+        newGrid.appendChild(items[item2Idx].cloneNode(true));
+      } else if (i === item2Idx) {
+        newGrid.appendChild(items[item1Idx].cloneNode(true));
+      } else {
+        newGrid.appendChild(items[i].cloneNode(true));
+      }
+    }
+    noteGrid.innerHTML = null;
+    noteGrid.appendChild(newGrid);
+    const selectedList = noteGrid.querySelectorAll(".selected");
+    for (let ele of selectedList) {
+      ele.classList.remove("selected");
+    }
+  }
+});

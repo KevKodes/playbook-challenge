@@ -14,7 +14,11 @@
 }
 
 .grid-item {
+  box-sizing: border-box;
   border: 1px solid #274450;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .grid-item:hover {
