@@ -19,10 +19,16 @@
           maxlength="255"
           placeholder="Add a new note..."
           required
+          rows="10"
+          cols="50"
+          id="note-text"
         ></textarea>
-        <button>Add Note</button>
+        <button id="add-note-button">Add Note</button>
       </div>
-      <div id="note-grid"></div>
+      <div id="note-grid-wrapper">
+        <h3>My Notes</h3>
+        <div id="note-grid"></div>
+      </div>
     </main>
   </body>
 </html>
