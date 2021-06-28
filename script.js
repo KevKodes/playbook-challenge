@@ -115,5 +115,9 @@ noteGrid.addEventListener("click", (e) => {
     }
     noteGrid.innerHTML = null;
     noteGrid.appendChild(newGrid);
+    const selectedList = noteGrid.querySelectorAll(".selected");
+    for (let ele of selectedList) {
+      ele.classList.remove("selected");
+    }
   }
 });
