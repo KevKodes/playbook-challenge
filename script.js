@@ -66,7 +66,7 @@ addButton.addEventListener("click", (e) => {
   addNewNote(newNoteStr);
 });
 
-// Click handler to edit the clicked note
+// Click handler to edit or delete the clicked note
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("edit-note")) {
     const editArea = e.target.previousElementSibling;
@@ -74,6 +74,9 @@ document.addEventListener("click", (e) => {
     console.log("original text: ", originalNote);
     editNote(editArea, originalNote);
   }
-});
 
-// Click handler to delete the clicked note
+  if (e.target.classList.contains("delete-note")) {
+    const deleted = e.target.parentElement;
+    deleted.parentElement.removeChild(deleted);
+  }
+});
