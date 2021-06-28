@@ -2,7 +2,7 @@ const addNewNote = (str) => {
   const parent = document.getElementById("note-grid");
   const newNote = document.createElement("div");
   const noteText = document.createElement("textarea");
-  noteText.setAttribute("readonly", "true");
+  noteText.setAttribute("readOnly", "true");
   noteText.innerHTML = str;
   const editButton = document.createElement("button");
   editButton.className = "edit-note";
@@ -18,7 +18,7 @@ const addNewNote = (str) => {
 };
 
 const editNote = (node) => {
-  node.setAttribute("readonly", "false");
+  node.removeAttribute("readonly");
 };
 
 // Click handler for the add note button
@@ -32,16 +32,12 @@ addButton.addEventListener("click", (e) => {
 });
 
 // Click handler to edit the clicked note
-/*
-THIS IS NOT RUNNING PROBS BECAUSE IT IS RUN BEFORE THE ELEMENTS EXIST
-*/
-const editbuttons = document.querySelectorAll(".edit-note");
-for (let i = 0; i < editbuttons.length; i++) {
-  editbuttons[i].addEventListener("click", (e) => {
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("edit-note")) {
     const editArea = e.target.previousElementSibling;
     console.log("edit: ", editArea);
     editNote(editArea);
-  });
-}
+  }
+});
 
 // Click handler to delete the clicked note
