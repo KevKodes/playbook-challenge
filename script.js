@@ -17,8 +17,43 @@ const addNewNote = (str) => {
   parent.appendChild(newNote);
 };
 
-const editNote = (node) => {
+const cancelEdit = (node, str) => {
+  console.log("string in cancel helper: ", str);
+  node.value = str;
+  node.setAttribute("readonly", "true");
+  const wrapper = node.parentElement;
+  wrapper.removeChild(wrapper.lastElementChild);
+  wrapper.removeChild(wrapper.lastElementChild);
+};
+
+const saveEdit = (node) => {
+  node.setAttribute("readonly", true);
+  const wrapper = node.parentElement;
+  wrapper.removeChild(wrapper.lastElementChild);
+  wrapper.removeChild(wrapper.lastElementChild);
+};
+
+const editNote = (node, str) => {
   node.removeAttribute("readonly");
+  const wrapper = node.parentElement;
+
+  //save button
+  const saveButton = document.createElement("button");
+  saveButton.className = "save-changes";
+  saveButton.innerText = "Save Changes";
+  saveButton.addEventListener("click", () => {
+    saveEdit(node);
+  });
+  wrapper.appendChild(saveButton);
+
+  // cancel button
+  const cancelButton = document.createElement("button");
+  cancelButton.className = "cancel-changes";
+  cancelButton.addEventListener("click", () => {
+    cancelEdit(node, str);
+  });
+  cancelButton.innerText = "Cancel Changes";
+  wrapper.appendChild(cancelButton);
 };
 
 // Click handler for the add note button
@@ -35,8 +70,9 @@ addButton.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("edit-note")) {
     const editArea = e.target.previousElementSibling;
-    console.log("edit: ", editArea);
-    editNote(editArea);
+    const originalNote = editArea.innerHTML;
+    console.log("original text: ", originalNote);
+    editNote(editArea, originalNote);
   }
 });
 
