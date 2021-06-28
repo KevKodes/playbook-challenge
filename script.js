@@ -1,6 +1,7 @@
 const addNewNote = (str) => {
   const parent = document.getElementById("note-grid");
   const newNote = document.createElement("div");
+  newNote.classList.add("grid-item");
   const noteText = document.createElement("textarea");
   noteText.setAttribute("readOnly", "true");
   noteText.innerHTML = str;
@@ -13,8 +14,15 @@ const addNewNote = (str) => {
   newNote.appendChild(noteText);
   newNote.appendChild(editButton);
   newNote.appendChild(deleteButton);
-
   parent.appendChild(newNote);
+
+  newNote.addEventListener("click", (e) => {
+    if (newNote.classList.contains("selected")) {
+      newNote.classList.remove("selected");
+    } else {
+      newNote.classList.add("selected");
+    }
+  });
 };
 
 const cancelEdit = (node, str) => {
@@ -80,3 +88,5 @@ document.addEventListener("click", (e) => {
     deleted.parentElement.removeChild(deleted);
   }
 });
+
+// Click handler to select notes from the grid
