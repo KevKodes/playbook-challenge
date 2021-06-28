@@ -1,3 +1,15 @@
+button {
+  color: #274450;
+  padding: 5px;
+}
+
+.grid-item textarea,
+.grid-item div {
+  margin: 5px;
+  width: 90%;
+  margin: 0 auto;
+}
+
 #new-note-wrapper {
   display: flex;
   flex-direction: column;
